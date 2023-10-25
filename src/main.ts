@@ -1,6 +1,5 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
-// Remember to rename these classes and interfaces!
+import { convertImageToWebp } from './converter';
 
 interface MyPluginSettings {
 	mySetting: string;
