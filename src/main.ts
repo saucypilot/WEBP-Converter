@@ -1,5 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { convertImageToWebp } from './converter';
+import { TFile } from 'obsidian';
 
 interface MyPluginSettings {
 	mySetting: string;
@@ -14,7 +15,7 @@ export default class MyPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
-
+		
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
@@ -26,6 +27,59 @@ export default class MyPlugin extends Plugin {
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
 		statusBarItemEl.setText('Status Bar Text');
+		
+		// This adds a command to the command palette (Ctrl+P or Cmd+P by default)
+		this.addCommand({
+			id: 'convert-image-to-webp',
+			name: 'Convert Image to WebP',
+			checkCallback: (checking: boolean) => {
+				if (!checking) {
+					// This will open the file explorer to choose an image file
+
+			// Add a command to convert an image to WebP format
+			this.addCommand({
+				id: 'convert-image-to-webp',
+				name: 'Convert Image to WebP',
+				checkCallback: (checking: boolean) => {
+					if (!checking) {
+						// This will open the file explorer to choose an image file
+						this.app.vault.selectFile().then((file: TFile) => {
+							if (file) {
+								// Get the path of the selected file
+								const filePath = file.path;
+								// Call the convert function from converter.ts
+								convertImageToWebp(this.app, filePath).then(() => {
+									new Notice('Image conversion to WebP completed.');
+								}).catch(err => {
+									console.error('Error converting image to WebP:', err);
+									new Notice('Error converting image to WebP. Check console for details.');
+								});
+							}
+						});
+					}
+					// Only show the command when not just checking for its presence
+					return !checking;
+				},
+			});
+				// This will open the file explorer to choose an image file
+				this.app.vault.chooseFile().then(file => {
+				  if (file) {
+					// Get the path of the selected file
+					const filePath = file.path;
+					// Call the convert function from converter.ts
+					convertImageToWebp(this.app, filePath).then(() => {
+					  new Notice('Image conversion to WebP completed.');
+					}).catch(err => {
+					  console.error('Error converting image to WebP:', err);
+					  new Notice('Error converting image to WebP. Check console for details.');
+					});
+				  }
+				});
+			  }
+			  // Only show the command when not just checking for its presence
+			  return !checking;
+			},
+		  });
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
