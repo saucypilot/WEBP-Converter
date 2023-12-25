@@ -3,7 +3,7 @@ import webp from 'webp-converter';
 import { TFile, TAbstractFile } from 'obsidian';
 
 export async function convertImageToWebp(app: App, filePath: string) {
-    // Get the file extension
+    // Get the file extension of the image
     const extension = filePath.split('.').pop().toLowerCase();
     // Array of image file extensions
     const imageExtensions = ['png', 'svg', 'jpeg', 'jpg'];

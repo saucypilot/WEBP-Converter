@@ -43,7 +43,7 @@ export default class MyPlugin extends Plugin {
 				checkCallback: (checking: boolean) => {
 					if (!checking) {
 						// This will open the file explorer to choose an image file
-						this.app.vault.selectFile().then((file: TFile) => {
+						this.app.vault.getFiles().forEach((file: TFile) => {
 							if (file) {
 								// Get the path of the selected file
 								const filePath = file.path;
@@ -62,7 +62,7 @@ export default class MyPlugin extends Plugin {
 				},
 			});
 				// This will open the file explorer to choose an image file
-				this.app.vault.chooseFile().then(file => {
+				this.app.vault.getFiles().forEach(file => {
 				  if (file) {
 					// Get the path of the selected file
 					const filePath = file.path;
